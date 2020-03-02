@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import com.tts.WeatherApp.model.Request;
 import com.tts.WeatherApp.model.Response;
+import com.tts.WeatherApp.model.ZipCodes;
 import com.tts.WeatherApp.service.WeatherService;
 
 @Controller
@@ -25,7 +26,10 @@ public class WeatherController {
 	
 	@GetMapping(value="/")
 	public String getIndex(Model model) {
+		Iterable<ZipCodes> zipCodeList = weatherService.findAllZipCode();
+		model.addAttribute("zipCodesHistory", zipCodeList);
 		model.addAttribute("request", new Request());
+		
 		return "index";
 	}
 	
@@ -33,6 +37,8 @@ public class WeatherController {
 	public String postIndex(Request request, Model model) {
 		Response data = weatherService.getForecast(request.getZipCode());
 		model.addAttribute("data", data);
+		Iterable<ZipCodes> zipCodeList = weatherService.findAllZipCode();
+		model.addAttribute("zipCodePost", zipCodeList);
 		return "index";
 	}
 	
